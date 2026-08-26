@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Summit Log — Faiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="topnav">
+    <span class="logo">Faiz's Summit Log</span>
+    <span class="nav-tag">01. field notes</span>
+  </nav>
+
+  <header class="hero">
+    <svg class="skyline" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
+      <polygon points="0,260 0,180 140,60 260,150 380,40 520,170 650,90 780,200 900,70 1040,160 1200,100 1200,260" fill="url(#skylineFill)"/>
+      <defs>
+        <linearGradient id="skylineFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5b6d5c"/>
+          <stop offset="100%" stop-color="#2e352f"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="hero-content">
+      <p class="eyebrow">Indonesia · Volcanic ranges</p>
+      <h1>Every summit<br>starts as a line<br>on a map.</h1>
+      <p class="subtitle">A working log of trails walked, and the ones still ahead. Kept by a geography student who'd rather be at altitude.</p>
+    </div>
+  </header>
+
+  <section class="about">
+    <span class="section-number">02</span>
+    <div class="about-text">
+      <h2>Why keep a log?</h2>
+      <p>
+        There's a kind of quiet above 3,000 meters that doesn't exist anywhere else.
+        This page tracks it. Elevation, distance, and the small details that fade
+        from memory faster than the ache in your legs does.
+      </p>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <span class="stat-number">2</span>
+      <span class="stat-label">Summits logged</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">3,726<small>m</small></span>
+      <span class="stat-label">Highest point</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">1</span>
+      <span class="stat-label">Trip in planning</span>
+    </div>
+  </section>
+
+  <section class="elevation">
+    <span class="section-number">03</span>
+    <h2>By the numbers</h2>
+    <div class="bars">
+      <div class="bar-row">
+        <span class="bar-label">Rinjani</span>
+        <div class="bar-track"><div class="bar-fill climbed" style="--h: 3726"></div></div>
+        <span class="bar-value">3,726 m</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Kerinci</span>
+        <div class="bar-track"><div class="bar-fill planned" style="--h: 3805"></div></div>
+        <span class="bar-value">3,805 m</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Semeru</span>
+        <div class="bar-track"><div class="bar-fill idea" style="--h: 3676"></div></div>
+        <span class="bar-value">3,676 m</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="mountains">
+    <span class="section-number">04</span>
+    <h2>The log</h2>
+    <div class="card-grid">
+
+      <article class="card climbed">
+        <div class="card-badge">Climbed</div>
+        <h3>Rinjani</h3>
+        <p class="meta">Lombok · 3,726 m</p>
+        <p>The crater lake at dawn made the whole climb worth it. Cold, thin air, and completely silent.</p>
+      </article>
+
+      <article class="card planned">
+        <div class="card-badge">Planning</div>
+        <h3>Kerinci</h3>
+        <p class="meta">Sumatra · 3,805 m</p>
+        <p>The highest volcano in Indonesia, next on the list.</p>
+      </article>
+
+      <article class="card idea">
+        <div class="card-badge">Someday</div>
+        <h3>Semeru</h3>
+        <p class="meta">East Java · 3,676 m</p>
+        <p>Close to home. Waiting for the crater trail to reopen.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p> one trail, one commit at a time. </p>
+  </footer>
+
+  <script>
+    const revealEls = document.querySelectorAll('.card, .stat, .about, .elevation');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>
