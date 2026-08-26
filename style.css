@@ -283,3 +283,16 @@ h1, h2 {
   .stats { gap: 1.75rem; }
   .bar-row { grid-template-columns: 60px 1fr 55px; }
 }
+
+/* Styling dasar untuk semua elemen yang akan di-reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Class yang ditambahkan JavaScript saat elemen terlihat di layar */
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
