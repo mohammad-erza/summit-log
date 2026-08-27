@@ -16,19 +16,46 @@
   </nav>
 
   <header class="hero">
-    <svg class="skyline" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
-      <polygon points="0,260 0,180 140,60 260,150 380,40 520,170 650,90 780,200 900,70 1040,160 1200,100 1200,260" fill="url(#skylineFill)"/>
-      <defs>
-        <linearGradient id="skylineFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#5b6d5c"/>
-          <stop offset="100%" stop-color="#2e352f"/>
-        </linearGradient>
-      </defs>
-    </svg>
+    <div class="hero-map" aria-hidden="true">
+      <svg class="topo" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice">
+        <g fill="none" stroke="#4a5d4e" stroke-opacity="0.16" stroke-width="1">
+          <ellipse cx="1120" cy="390" rx="90" ry="42"/>
+          <ellipse cx="1120" cy="390" rx="160" ry="78"/>
+          <ellipse cx="1120" cy="390" rx="240" ry="118"/>
+          <ellipse cx="1120" cy="390" rx="330" ry="164"/>
+          <ellipse cx="1120" cy="390" rx="430" ry="214"/>
+        </g>
+      </svg>
+      <svg class="skyline" viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice">
+        <defs>
+          <linearGradient id="rangeFar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8b9a86"/>
+            <stop offset="100%" stop-color="#6f7d6c"/>
+          </linearGradient>
+          <linearGradient id="rangeMid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5c6d5c"/>
+            <stop offset="100%" stop-color="#445244"/>
+          </linearGradient>
+          <linearGradient id="rangeNear" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3a463c"/>
+            <stop offset="100%" stop-color="#232820"/>
+          </linearGradient>
+        </defs>
+        <circle class="hero-sun" cx="1188" cy="86" r="34" fill="#e0b07a"/>
+        <path fill="url(#rangeFar)" d="M0 420 V268 L160 248 L310 278 L470 198 L640 258 L790 188 L960 248 L1120 208 L1280 248 L1440 218 V420 Z"/>
+        <path fill="url(#rangeMid)" d="M0 420 V328 L190 298 L330 338 L490 258 L650 318 L800 238 L960 308 L1120 248 L1280 298 L1440 268 V420 Z"/>
+        <path fill="url(#rangeNear)" d="M0 420 V372 L110 352 L220 388 L360 292 L500 368 L620 248 L700 286 L780 198 L860 268 L940 168 L1010 248 L1120 312 L1260 268 L1440 352 V420 Z"/>
+      </svg>
+    </div>
     <div class="hero-content">
       <p class="eyebrow">Indonesia · Volcanic ranges</p>
       <h1>Every summit<br>starts as a line<br>on a map.</h1>
       <p class="subtitle">A working log of trails walked, and the ones still ahead. Kept by a geography student who'd rather be at altitude.</p>
+      <ul class="hero-coords">
+        <li>8°25′S 116°28′E</li>
+        <li>Rinjani datum</li>
+        <li>3,726 m</li>
+      </ul>
     </div>
   </header>
 
@@ -114,18 +141,6 @@
     <p> one trail, one commit at a time. </p>
   </footer>
 
-  <script>
-    const revealEls = document.querySelectorAll('.card, .stat, .about, .elevation');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in-view');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.2 });
-    revealEls.forEach(el => io.observe(el));
-  </script>
   <script src="script.js"></script>
 </body>
 </html>
