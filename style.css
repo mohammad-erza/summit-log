@@ -423,3 +423,71 @@ h1, h2 {
   color: var(--moss);
   opacity: 0.85;
 }
+
+/* Dynamic Stats Grid for Section 03 */
+.stats-auto {
+  display: flex;
+  justify-content: center;
+  gap: 3.5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.stat-auto-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-auto-number {
+  font-family: 'Fraunces', serif;
+  font-size: 2.5rem;
+  color: var(--clay);
+}
+
+.stat-auto-number small {
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.stat-auto-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.35rem;
+  opacity: 0.65;
+}
+
+/* Client-side Filtering for Section 04 */
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.filter-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background: var(--moss);
+  color: var(--paper);
+  border-color: var(--moss);
+}
+
+/* Hidden Class for Filtered Cards */
+.card.hidden {
+  display: none !important;
+}

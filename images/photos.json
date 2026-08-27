@@ -1,0 +1,31 @@
+[
+  {
+    "file": "images/RINJANI.jpeg",
+    "caption": {
+      "title": "Summit Sunrise",
+      "meta": "Rinjani · 3,726 m"
+    },
+    "position": "center 60%"
+  },
+  {
+    "file": "images/segara_anak.jpg",
+    "caption": {
+      "title": "Segara Anak Lake",
+      "meta": "Rinjani · 2,008 m"
+    }
+  },
+  {
+    "file": "images/rinjani_camp.jpg",
+    "caption": {
+      "title": "Sembalun Camp",
+      "meta": "Rinjani · 2,639 m"
+    }
+  },
+  {
+    "file": "images/rinjani_camp.jpg",
+    "caption": {
+      "title": "Sembalun Camp",
+      "meta": "Rinjani · 2,639 m"
+    }
+  }
+]

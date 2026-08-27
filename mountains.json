@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Rinjani",
+    "elevation": 3726,
+    "status": "climbed",
+    "location": "Lombok",
+    "date": "July 2024",
+    "coords": [-8.416667, 116.466667],
+    "description": "The crater lake at dawn made the whole climb worth it. Cold, thin air, and completely silent."
+  },
+  {
+    "name": "Kerinci",
+    "elevation": 3805,
+    "status": "planning",
+    "location": "Sumatra",
+    "date": "August 2026",
+    "coords": [-1.696944, 101.264444],
+    "description": "The highest volcano in Indonesia, next on the list."
+  },
+  {
+    "name": "Semeru",
+    "elevation": 3676,
+    "status": "someday",
+    "location": "East Java",
+    "date": "Someday",
+    "coords": [-8.108, 112.922],
+    "description": "Close to home. Waiting for the crater trail to reopen."
+  }
+]

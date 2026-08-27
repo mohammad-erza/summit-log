@@ -73,15 +73,15 @@
 
   <section class="stats reveal-on-scroll">
     <div class="stat">
-      <span class="stat-number">2</span>
+      <span class="stat-number" id="header-stat-logged">-</span>
       <span class="stat-label">Summits logged</span>
     </div>
     <div class="stat">
-      <span class="stat-number">3,726<small>m</small></span>
+      <span class="stat-number" id="header-stat-highest">-</span>
       <span class="stat-label">Highest point</span>
     </div>
     <div class="stat">
-      <span class="stat-number">1</span>
+      <span class="stat-number" id="header-stat-planning">-</span>
       <span class="stat-label">Trip in planning</span>
     </div>
   </section>
@@ -89,21 +89,18 @@
   <section class="elevation reveal-on-scroll">
     <span class="section-number">03</span>
     <h2>By the numbers</h2>
-    <div class="bars">
-      <div class="bar-row">
-        <span class="bar-label">Rinjani</span>
-        <div class="bar-track"><div class="bar-fill climbed" style="--h: 3726"></div></div>
-        <span class="bar-value">3,726 m</span>
+    <div class="stats-auto">
+      <div class="stat-auto-card">
+        <span class="stat-auto-number" id="stat-climbed">-</span>
+        <span class="stat-auto-label">Summits Climbed</span>
       </div>
-      <div class="bar-row">
-        <span class="bar-label">Kerinci</span>
-        <div class="bar-track"><div class="bar-fill planned" style="--h: 3805"></div></div>
-        <span class="bar-value">3,805 m</span>
+      <div class="stat-auto-card">
+        <span class="stat-auto-number" id="stat-elevation">-</span>
+        <span class="stat-auto-label">Total Elevation Gain</span>
       </div>
-      <div class="bar-row">
-        <span class="bar-label">Semeru</span>
-        <div class="bar-track"><div class="bar-fill idea" style="--h: 3676"></div></div>
-        <span class="bar-value">3,676 m</span>
+      <div class="stat-auto-card">
+        <span class="stat-auto-number" id="stat-planned">-</span>
+        <span class="stat-auto-label">Summits Planned</span>
       </div>
     </div>
   </section>
@@ -111,29 +108,14 @@
   <section class="mountains reveal-on-scroll">
     <span class="section-number">04</span>
     <h2>The log</h2>
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="climbed">Climbed</button>
+      <button class="filter-btn" data-filter="planning">Planning</button>
+      <button class="filter-btn" data-filter="someday">Someday</button>
+    </div>
     <div class="card-grid">
-
-      <article class="card climbed">
-        <div class="card-badge">Climbed</div>
-        <h3>Rinjani</h3>
-        <p class="meta">Lombok · 3,726 m</p>
-        <p>The crater lake at dawn made the whole climb worth it. Cold, thin air, and completely silent.</p>
-      </article>
-
-      <article class="card planned">
-        <div class="card-badge">Planning</div>
-        <h3>Kerinci</h3>
-        <p class="meta">Sumatra · 3,805 m</p>
-        <p>The highest volcano in Indonesia, next on the list.</p>
-      </article>
-
-      <article class="card idea">
-        <div class="card-badge">Someday</div>
-        <h3>Semeru</h3>
-        <p class="meta">East Java · 3,676 m</p>
-        <p>Close to home. Waiting for the crater trail to reopen.</p>
-      </article>
-
+      <!-- Dynamically loaded from mountains.json -->
     </div>
   </section>
 
@@ -141,33 +123,7 @@
     <span class="section-number">05</span>
     <h2>From the trail</h2>
     <div class="gallery-grid">
-      <figure class="gallery-item">
-        <div class="gallery-img-wrapper">
-          <img src="images/rinjani_summit.jpg" alt="Mount Rinjani summit sunrise" loading="lazy">
-        </div>
-        <figcaption>
-          <span class="photo-title">Summit Sunrise</span>
-          <span class="photo-meta">Rinjani · 3,726 m</span>
-        </figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <div class="gallery-img-wrapper">
-          <img src="images/segara_anak.jpg" alt="Segara Anak crater lake and Baru Jari volcano" loading="lazy">
-        </div>
-        <figcaption>
-          <span class="photo-title">Segara Anak Lake</span>
-          <span class="photo-meta">Rinjani · 2,008 m</span>
-        </figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <div class="gallery-img-wrapper">
-          <img src="images/rinjani_camp.jpg" alt="Plawangan Sembalun campsite at sunset" loading="lazy">
-        </div>
-        <figcaption>
-          <span class="photo-title">Sembalun Camp</span>
-          <span class="photo-meta">Rinjani · 2,639 m</span>
-        </figcaption>
-      </figure>
+      <!-- Dynamically loaded from photos.json -->
     </div>
   </section>
 
