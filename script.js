@@ -19,7 +19,7 @@ async function loadGallery() {
   if (!grid) return;
 
   try {
-    const response = await fetch('images/photos.json');
+    const response = await fetch(`images/photos.json?t=${Date.now()}`);
     if (!response.ok) throw new Error('Failed to fetch photos.json');
     const photos = await response.json();
 
@@ -54,7 +54,7 @@ async function loadMountains() {
   if (!grid) return;
 
   try {
-    const response = await fetch('mountains.json');
+    const response = await fetch(`mountains.json?t=${Date.now()}`);
     if (!response.ok) throw new Error('Failed to fetch mountains.json');
     const mountains = await response.json();
 
@@ -69,23 +69,13 @@ async function loadMountains() {
       if (m.status === 'climbed') {
         climbedCount++;
         totalElevationGain += elev;
-        if (elev > maxElevation) {
-          maxElevation = elev;
-        }
+        if (elev > maxElevation) maxElevation = elev;
       } else if (m.status === 'planning') {
         plannedCount++;
       }
     });
 
-    // Populate Section 02 stats
-    const headLogged = document.getElementById('header-stat-logged');
-    const headHighest = document.getElementById('header-stat-highest');
-    const headPlanning = document.getElementById('header-stat-planning');
-    if (headLogged) headLogged.textContent = climbedCount;
-    if (headHighest) headHighest.innerHTML = `${maxElevation.toLocaleString()}<small>m</small>`;
-    if (headPlanning) headPlanning.textContent = plannedCount;
-
-    // Populate Section 03 stats
+    // Populate Section 03 dynamic stats
     const statClimbedEl = document.getElementById('stat-climbed');
     const statElevationEl = document.getElementById('stat-elevation');
     const statPlannedEl = document.getElementById('stat-planned');

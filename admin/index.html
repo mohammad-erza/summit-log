@@ -6,402 +6,535 @@
   <title>Admin Dashboard — Summit Log</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
   <style>
-    .admin-container {
-      max-width: 800px;
-      margin: 4rem auto;
-      padding: 0 1.5rem;
+    :root {
+      --ink: #23261f; --paper: #f6f4ee; --moss: #4a5d4e;
+      --clay: #a8683f; --line: #ddd7c8; --card: #ffffff;
     }
-    .admin-header {
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+
+    /* ── Layout ── */
+    .admin-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .admin-topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line); padding-bottom: 1.25rem; margin-bottom: 1.75rem;
     }
-    .admin-header h1 {
-      font-family: 'Fraunces', serif;
-      font-size: 2.2rem;
+    .admin-topbar h1 { font-family: 'Fraunces', serif; font-size: 1.9rem; }
+    .btn {
+      font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.05em; padding: 0.45rem 1.1rem;
+      border: 1px solid var(--line); background: transparent; color: var(--ink);
+      border-radius: 4px; cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: inline-block;
     }
-    .admin-auth {
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 1.5rem;
-      border-radius: 4px;
-      margin-bottom: 2rem;
-      display: flex;
-      gap: 1rem;
-      align-items: center;
+    .btn:hover { background: var(--moss); color: var(--paper); border-color: var(--moss); }
+    .btn.danger:hover { background: var(--clay); color: var(--paper); border-color: var(--clay); }
+    .btn.primary { background: var(--moss); color: var(--paper); border-color: var(--moss); }
+    .btn.primary:hover { opacity: 0.85; }
+
+    /* ── Auth bar ── */
+    .auth-bar {
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      background: var(--card); border: 1px solid var(--line); border-radius: 4px;
+      padding: 0.9rem 1.25rem; margin-bottom: 1.5rem;
     }
-    .admin-auth label {
-      font-size: 0.85rem;
-      font-weight: 500;
+    .auth-bar label { font-size: 0.82rem; font-weight: 500; white-space: nowrap; }
+    .field {
+      padding: 0.45rem 0.75rem; border: 1px solid var(--line); background: var(--paper);
+      color: var(--ink); border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 0.88rem;
     }
-    .admin-input {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--line);
-      background: var(--paper);
-      color: var(--ink);
-      border-radius: 4px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
+    .auth-bar .field { flex: 1; min-width: 180px; }
+    .auth-hint { font-size: 0.72rem; opacity: 0.55; }
+
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--line); margin-bottom: 2rem; }
+    .tab-btn {
+      font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+      padding: 0.65rem 1.5rem; border: none; background: transparent; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -2px; color: #888;
+      transition: all 0.2s;
     }
-    .admin-btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 0.5rem 1.25rem;
-      border: 1px solid var(--line);
-      background: transparent;
-      color: var(--ink);
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.25s ease;
+    .tab-btn.active { color: var(--moss); border-bottom-color: var(--moss); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Status msg ── */
+    #status-box {
+      padding: 0.75rem 1rem; border-radius: 4px; font-size: 0.85rem;
+      margin-bottom: 1.25rem; display: none;
     }
-    .admin-btn:hover {
-      background: var(--moss);
-      color: var(--paper);
-      border-color: var(--moss);
+    #status-box.success { background: #e3e9e3; color: var(--moss); border: 1px solid var(--moss); display: block; }
+    #status-box.error   { background: #f2e3d5; color: var(--clay); border: 1px solid var(--clay); display: block; }
+
+    /* ── Two-column layout ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1.15fr; gap: 2rem; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── Panel card ── */
+    .panel-card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 4px; padding: 1.5rem;
     }
-    .admin-btn.danger:hover {
-      background: var(--clay);
-      color: var(--paper);
-      border-color: var(--clay);
+    .panel-card h2 {
+      font-family: 'Fraunces', serif; font-size: 1.3rem;
+      border-bottom: 1px solid var(--line); padding-bottom: 0.6rem; margin-bottom: 1.25rem;
     }
-    .admin-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 2.5rem;
+
+    /* ── Form ── */
+    .form-group { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
+    .form-group label { font-size: 0.78rem; font-weight: 500; color: var(--moss); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    textarea.field { resize: vertical; min-height: 72px; }
+    select.field { cursor: pointer; }
+    .form-actions { display: flex; gap: 0.6rem; margin-top: 0.5rem; flex-wrap: wrap; }
+
+    /* ── Image preview ── */
+    .img-preview-wrap {
+      margin-top: 0.5rem; border: 1px dashed var(--line); border-radius: 4px;
+      background: #f0ede5; overflow: hidden; height: 120px; display: flex;
+      align-items: center; justify-content: center;
     }
-    @media (max-width: 768px) {
-      .admin-grid {
-        grid-template-columns: 1fr;
-      }
+    .img-preview-wrap img { max-height: 120px; max-width: 100%; object-fit: contain; }
+    .img-preview-wrap span { font-size: 0.78rem; opacity: 0.5; }
+
+    /* ── Item list ── */
+    .item-list { display: flex; flex-direction: column; gap: 0; }
+    .item-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.8rem 0; border-bottom: 1px solid var(--line); gap: 1rem;
     }
-    .admin-section {
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 1.5rem;
-      border-radius: 4px;
-      height: fit-content;
+    .item-row:last-child { border-bottom: none; }
+    .item-info h4 { font-family: 'Fraunces', serif; font-size: 1.05rem; }
+    .item-info p { font-size: 0.73rem; opacity: 0.65; margin-top: 0.1rem; }
+    .item-thumb {
+      width: 52px; height: 36px; object-fit: cover; border-radius: 2px;
+      border: 1px solid var(--line); flex-shrink: 0;
     }
-    .admin-section h2 {
-      font-family: 'Fraunces', serif;
-      font-size: 1.4rem;
-      margin-bottom: 1.25rem;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 0.5rem;
-    }
-    .form-group {
-      margin-bottom: 1.1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-    .form-group label {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--moss);
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-    .textarea-input {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .mountain-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.85rem 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .mountain-item:last-child {
-      border-bottom: none;
-    }
-    .mountain-info h4 {
-      font-family: 'Fraunces', serif;
-      font-size: 1.15rem;
-    }
-    .mountain-info p {
-      font-size: 0.75rem;
-      opacity: 0.7;
-    }
-    .mountain-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .status-msg {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      display: none;
-    }
-    .status-msg.success {
-      background: #e3e9e3;
-      color: var(--moss);
-      border: 1px solid var(--moss);
-      display: block;
-    }
-    .status-msg.error {
-      background: #f2e3d5;
-      color: var(--clay);
-      border: 1px solid var(--clay);
-      display: block;
-    }
+    .item-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+    .item-actions .btn { padding: 0.25rem 0.65rem; font-size: 0.72rem; }
+    .empty-msg { font-size: 0.88rem; opacity: 0.55; padding: 0.5rem 0; }
   </style>
 </head>
 <body>
 
-  <div class="admin-container">
-    <div class="admin-header">
-      <h1>Summit Log Admin</h1>
-      <a href="../" class="admin-btn">View Site</a>
-    </div>
+<div class="admin-wrap">
 
-    <div class="admin-auth">
-      <label for="admin-pass">Admin Password:</label>
-      <input type="password" id="admin-pass" class="admin-input" placeholder="Enter password...">
-      <span style="font-size: 0.75rem; opacity: 0.6;">(Auto-saved locally)</span>
-    </div>
+  <!-- Top bar -->
+  <div class="admin-topbar">
+    <h1>Summit Log Admin</h1>
+    <a href="../" class="btn">← View Site</a>
+  </div>
 
-    <div id="status-box" class="status-msg"></div>
+  <!-- Auth -->
+  <div class="auth-bar">
+    <label for="admin-pass">Admin Password:</label>
+    <input type="password" id="admin-pass" class="field" placeholder="Enter password…">
+    <span class="auth-hint">Saved in your browser</span>
+  </div>
 
-    <div class="admin-grid">
-      <!-- Left column: Add/Edit form -->
-      <div class="admin-section">
-        <h2 id="form-title">Add New Mountain</h2>
-        <form id="mountain-form">
-          <input type="hidden" id="edit-index" value="-1">
-          
+  <!-- Status -->
+  <div id="status-box"></div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="mountains">🏔 Mountains</button>
+    <button class="tab-btn" data-tab="gallery">📷 Gallery Photos</button>
+  </div>
+
+  <!-- ══ TAB: Mountains ══════════════════════════════════════════════════════ -->
+  <div id="tab-mountains" class="tab-panel active">
+    <div class="two-col">
+
+      <!-- Form -->
+      <div class="panel-card">
+        <h2 id="mtn-form-title">Add Mountain</h2>
+        <form id="mtn-form">
+          <input type="hidden" id="mtn-edit-idx" value="-1">
+
           <div class="form-group">
-            <label for="m-name">Mountain Name</label>
-            <input type="text" id="m-name" class="admin-input" required>
+            <label for="mtn-name">Name</label>
+            <input type="text" id="mtn-name" class="field" required>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="m-elevation">Elevation (meters)</label>
-              <input type="number" id="m-elevation" class="admin-input" required>
+              <label for="mtn-elevation">Elevation (m)</label>
+              <input type="number" id="mtn-elevation" class="field" required>
             </div>
             <div class="form-group">
-              <label for="m-location">Location (Region/Island)</label>
-              <input type="text" id="m-location" class="admin-input" placeholder="e.g. Lombok" required>
+              <label for="mtn-location">Location</label>
+              <input type="text" id="mtn-location" class="field" placeholder="e.g. Lombok" required>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="m-status">Status</label>
-              <select id="m-status" class="admin-input" required>
+              <label for="mtn-status">Status</label>
+              <select id="mtn-status" class="field" required>
                 <option value="climbed">Climbed</option>
                 <option value="planning">Planning</option>
                 <option value="someday">Someday</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="m-date">Date Tag</label>
-              <input type="text" id="m-date" class="admin-input" placeholder="e.g. July 2024 or Someday" required>
+              <label for="mtn-date">Date tag</label>
+              <input type="text" id="mtn-date" class="field" placeholder="e.g. July 2024" required>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="m-lat">Latitude</label>
-              <input type="number" step="any" id="m-lat" class="admin-input" required>
+              <label for="mtn-lat">Latitude</label>
+              <input type="number" step="any" id="mtn-lat" class="field" required>
             </div>
             <div class="form-group">
-              <label for="m-lng">Longitude</label>
-              <input type="number" step="any" id="m-lng" class="admin-input" required>
+              <label for="mtn-lng">Longitude</label>
+              <input type="number" step="any" id="mtn-lng" class="field" required>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="m-description">Description / Field Notes</label>
-            <textarea id="m-description" class="admin-input textarea-input" required></textarea>
+            <label for="mtn-desc">Description / Field Notes</label>
+            <textarea id="mtn-desc" class="field" required></textarea>
           </div>
 
-          <div style="display: flex; gap: 0.75rem;">
-            <button type="submit" class="admin-btn">Save Mountain</button>
-            <button type="button" id="cancel-btn" class="admin-btn" style="display: none;">Cancel</button>
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Save Mountain</button>
+            <button type="button" id="mtn-cancel" class="btn" style="display:none">Cancel</button>
           </div>
         </form>
       </div>
 
-      <!-- Right column: List of mountains -->
-      <div class="admin-section">
+      <!-- List -->
+      <div class="panel-card">
         <h2>Logged Peaks</h2>
-        <div id="mountains-list">
-          <p style="font-size: 0.9rem; opacity: 0.6;">Loading database...</p>
+        <div class="item-list" id="mtn-list">
+          <p class="empty-msg">Loading…</p>
         </div>
       </div>
+
     </div>
-  </div>
+  </div><!-- /tab-mountains -->
 
-  <script>
-    let mountainsData = [];
+  <!-- ══ TAB: Gallery ═══════════════════════════════════════════════════════ -->
+  <div id="tab-gallery" class="tab-panel">
+    <div class="two-col">
 
-    // Load saved password
-    const passInput = document.getElementById('admin-pass');
-    passInput.value = localStorage.getItem('summit_admin_pass') || '';
-    passInput.addEventListener('input', () => {
-      localStorage.setItem('summit_admin_pass', passInput.value);
-    });
+      <!-- Form -->
+      <div class="panel-card">
+        <h2 id="gal-form-title">Add Photo</h2>
+        <form id="gal-form">
+          <input type="hidden" id="gal-edit-idx" value="-1">
 
-    // Helper to display status message
-    function showStatus(text, type = 'success') {
-      const box = document.getElementById('status-box');
-      box.textContent = text;
-      box.className = `status-msg ${type}`;
-      setTimeout(() => {
-        box.style.display = 'none';
-      }, 5000);
-    }
-
-    // Fetch initial database
-    async function loadData() {
-      try {
-        const response = await fetch('../mountains.json');
-        if (!response.ok) throw new Error('Failed to load database file');
-        mountainsData = await response.json();
-        renderList();
-      } catch (err) {
-        showStatus('Error loading mountains.json: ' + err.message, 'error');
-      }
-    }
-
-    // Render list on the right side
-    function renderList() {
-      const listEl = document.getElementById('mountains-list');
-      if (mountainsData.length === 0) {
-        listEl.innerHTML = '<p style="font-size: 0.9rem; opacity: 0.6;">No mountains in database.</p>';
-        return;
-      }
-
-      listEl.innerHTML = '';
-      mountainsData.forEach((m, idx) => {
-        const item = document.createElement('div');
-        item.className = 'mountain-item';
-        item.innerHTML = `
-          <div class="mountain-info">
-            <h4>${m.name}</h4>
-            <p>${m.location} · ${m.elevation.toLocaleString()} m · <span style="text-transform: capitalize; font-weight: 600;">${m.status}</span></p>
+          <!-- Image upload -->
+          <div class="form-group">
+            <label for="gal-file-input">Upload Image</label>
+            <input type="file" id="gal-file-input" class="field" accept="image/*">
+            <div class="img-preview-wrap" id="gal-img-preview">
+              <span>No image selected</span>
+            </div>
           </div>
-          <div class="mountain-actions">
-            <button class="admin-btn" onclick="editMountain(${idx})" style="padding: 0.3rem 0.75rem; font-size: 0.75rem;">Edit</button>
-            <button class="admin-btn danger" onclick="deleteMountain(${idx})" style="padding: 0.3rem 0.75rem; font-size: 0.75rem;">Delete</button>
+
+          <!-- Or use existing path -->
+          <div class="form-group">
+            <label for="gal-filepath">
+              Or use existing path &nbsp;<span style="font-weight:400; opacity:.6">(e.g. images/rinjani_summit.jpg)</span>
+            </label>
+            <input type="text" id="gal-filepath" class="field" placeholder="images/your_photo.jpg">
           </div>
-        `;
-        listEl.appendChild(item);
+
+          <div class="form-group">
+            <label for="gal-title">Title</label>
+            <input type="text" id="gal-title" class="field" required>
+          </div>
+
+          <div class="form-group">
+            <label for="gal-meta">Meta / Caption</label>
+            <input type="text" id="gal-meta" class="field" placeholder="e.g. Rinjani · 3,726 m" required>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Save Photo</button>
+            <button type="button" id="gal-cancel" class="btn" style="display:none">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- List -->
+      <div class="panel-card">
+        <h2>Photo Library</h2>
+        <div class="item-list" id="gal-list">
+          <p class="empty-msg">Loading…</p>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-gallery -->
+
+</div><!-- /admin-wrap -->
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// Shared helpers
+// ══════════════════════════════════════════════════════════════════════════════
+const passEl = document.getElementById('admin-pass');
+passEl.value = localStorage.getItem('summit_admin_pass') || '';
+passEl.addEventListener('input', () => localStorage.setItem('summit_admin_pass', passEl.value));
+
+const statusBox = document.getElementById('status-box');
+let statusTimer;
+function showStatus(msg, type = 'success') {
+  statusBox.textContent = msg;
+  statusBox.className = type;
+  clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => { statusBox.className = ''; statusBox.style.display = 'none'; }, 6000);
+}
+
+async function apiPost(endpoint, payload) {
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: passEl.value, ...payload }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Request failed');
+  return json;
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Mountains CRUD
+// ══════════════════════════════════════════════════════════════════════════════
+let mountains = [];
+
+async function loadMountains() {
+  try {
+    const res = await fetch(`../mountains.json?t=${Date.now()}`);
+    mountains = await res.json();
+    renderMtnList();
+  } catch (e) { showStatus('Failed to load mountains: ' + e.message, 'error'); }
+}
+
+function renderMtnList() {
+  const el = document.getElementById('mtn-list');
+  if (!mountains.length) { el.innerHTML = '<p class="empty-msg">No mountains yet.</p>'; return; }
+  el.innerHTML = mountains.map((m, i) => `
+    <div class="item-row">
+      <div class="item-info">
+        <h4>${m.name}</h4>
+        <p>${m.location} · ${Number(m.elevation).toLocaleString()} m · <b style="text-transform:capitalize">${m.status}</b></p>
+      </div>
+      <div class="item-actions">
+        <button class="btn" onclick="editMtn(${i})">Edit</button>
+        <button class="btn danger" onclick="deleteMtn(${i})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+window.editMtn = function(i) {
+  const m = mountains[i];
+  document.getElementById('mtn-edit-idx').value = i;
+  document.getElementById('mtn-name').value = m.name;
+  document.getElementById('mtn-elevation').value = m.elevation;
+  document.getElementById('mtn-location').value = m.location;
+  document.getElementById('mtn-status').value = m.status;
+  document.getElementById('mtn-date').value = m.date;
+  document.getElementById('mtn-lat').value = m.coords[0];
+  document.getElementById('mtn-lng').value = m.coords[1];
+  document.getElementById('mtn-desc').value = m.description;
+  document.getElementById('mtn-form-title').textContent = `Edit: ${m.name}`;
+  document.getElementById('mtn-cancel').style.display = 'inline-block';
+  document.getElementById('mtn-name').focus();
+};
+
+window.deleteMtn = async function(i) {
+  if (!confirm(`Delete "${mountains[i].name}"?`)) return;
+  mountains.splice(i, 1);
+  await saveMountains();
+};
+
+function resetMtnForm() {
+  document.getElementById('mtn-form').reset();
+  document.getElementById('mtn-edit-idx').value = '-1';
+  document.getElementById('mtn-form-title').textContent = 'Add Mountain';
+  document.getElementById('mtn-cancel').style.display = 'none';
+}
+
+document.getElementById('mtn-cancel').addEventListener('click', resetMtnForm);
+
+document.getElementById('mtn-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const idx = parseInt(document.getElementById('mtn-edit-idx').value);
+  const entry = {
+    name:        document.getElementById('mtn-name').value.trim(),
+    elevation:   parseInt(document.getElementById('mtn-elevation').value),
+    location:    document.getElementById('mtn-location').value.trim(),
+    status:      document.getElementById('mtn-status').value,
+    date:        document.getElementById('mtn-date').value.trim(),
+    coords:      [parseFloat(document.getElementById('mtn-lat').value), parseFloat(document.getElementById('mtn-lng').value)],
+    description: document.getElementById('mtn-desc').value.trim(),
+  };
+  if (idx === -1) mountains.push(entry); else mountains[idx] = entry;
+  await saveMountains();
+  resetMtnForm();
+});
+
+async function saveMountains() {
+  if (!passEl.value) { showStatus('Enter admin password first.', 'error'); return; }
+  try {
+    await apiPost('../api/update-mountains', { data: mountains });
+    showStatus('Mountains saved successfully!');
+    renderMtnList();
+  } catch (e) { showStatus('Save failed: ' + e.message, 'error'); }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Gallery CRUD
+// ══════════════════════════════════════════════════════════════════════════════
+let photos = [];
+let pendingUploadBase64 = null;
+let pendingUploadFilename = null;
+
+async function loadPhotos() {
+  try {
+    const res = await fetch(`../images/photos.json?t=${Date.now()}`);
+    photos = await res.json();
+    renderGalList();
+  } catch (e) { showStatus('Failed to load photos: ' + e.message, 'error'); }
+}
+
+function renderGalList() {
+  const el = document.getElementById('gal-list');
+  if (!photos.length) { el.innerHTML = '<p class="empty-msg">No photos yet.</p>'; return; }
+  el.innerHTML = photos.map((p, i) => `
+    <div class="item-row">
+      <img class="item-thumb" src="../${p.file}?t=${Date.now()}" alt="${p.caption.title}" onerror="this.style.display='none'">
+      <div class="item-info" style="flex:1">
+        <h4>${p.caption.title}</h4>
+        <p>${p.caption.meta}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn" onclick="editPhoto(${i})">Edit</button>
+        <button class="btn danger" onclick="deletePhoto(${i})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+window.editPhoto = function(i) {
+  const p = photos[i];
+  document.getElementById('gal-edit-idx').value = i;
+  document.getElementById('gal-filepath').value = p.file;
+  document.getElementById('gal-title').value = p.caption.title;
+  document.getElementById('gal-meta').value = p.caption.meta;
+
+  const previewWrap = document.getElementById('gal-img-preview');
+  previewWrap.innerHTML = `<img src="../${p.file}?t=${Date.now()}" alt="${p.caption.title}" onerror="this.style.display='none'">`;
+
+  pendingUploadBase64 = null;
+  pendingUploadFilename = null;
+  document.getElementById('gal-file-input').value = '';
+  document.getElementById('gal-form-title').textContent = `Edit: ${p.caption.title}`;
+  document.getElementById('gal-cancel').style.display = 'inline-block';
+  document.getElementById('gal-title').focus();
+};
+
+window.deletePhoto = async function(i) {
+  if (!confirm(`Delete photo "${photos[i].caption.title}"?`)) return;
+  photos.splice(i, 1);
+  await savePhotos();
+};
+
+function resetGalForm() {
+  document.getElementById('gal-form').reset();
+  document.getElementById('gal-edit-idx').value = '-1';
+  document.getElementById('gal-form-title').textContent = 'Add Photo';
+  document.getElementById('gal-cancel').style.display = 'none';
+  document.getElementById('gal-img-preview').innerHTML = '<span>No image selected</span>';
+  pendingUploadBase64 = null;
+  pendingUploadFilename = null;
+}
+
+document.getElementById('gal-cancel').addEventListener('click', resetGalForm);
+
+// File picker → Base64 preview
+document.getElementById('gal-file-input').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  pendingUploadFilename = file.name;
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingUploadBase64 = ev.target.result.split(',')[1]; // strip data: prefix
+    const previewWrap = document.getElementById('gal-img-preview');
+    previewWrap.innerHTML = `<img src="${ev.target.result}" alt="preview">`;
+    // Auto-fill filepath
+    if (!document.getElementById('gal-filepath').value) {
+      document.getElementById('gal-filepath').value = `images/${file.name}`;
+    }
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('gal-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!passEl.value) { showStatus('Enter admin password first.', 'error'); return; }
+
+  let filePath = document.getElementById('gal-filepath').value.trim();
+
+  // Upload image file if a new one was selected
+  if (pendingUploadBase64 && pendingUploadFilename) {
+    try {
+      showStatus('Uploading image…');
+      const upRes = await apiPost('../api/upload-image', {
+        filename: pendingUploadFilename,
+        base64: pendingUploadBase64,
       });
+      filePath = upRes.file; // path returned from function
+    } catch (err) {
+      showStatus('Image upload failed: ' + err.message, 'error');
+      return;
     }
+  }
 
-    // Fill form for editing
-    window.editMountain = function(idx) {
-      const m = mountainsData[idx];
-      document.getElementById('edit-index').value = idx;
-      document.getElementById('m-name').value = m.name;
-      document.getElementById('m-elevation').value = m.elevation;
-      document.getElementById('m-location').value = m.location;
-      document.getElementById('m-status').value = m.status;
-      document.getElementById('m-date').value = m.date;
-      document.getElementById('m-lat').value = m.coords[0];
-      document.getElementById('m-lng').value = m.coords[1];
-      document.getElementById('m-description').value = m.description;
+  if (!filePath) { showStatus('Select an image file or provide a path.', 'error'); return; }
 
-      document.getElementById('form-title').textContent = `Edit Mountain: ${m.name}`;
-      document.getElementById('cancel-btn').style.display = 'inline-block';
-    }
+  const idx = parseInt(document.getElementById('gal-edit-idx').value);
+  const entry = {
+    file: filePath,
+    caption: {
+      title: document.getElementById('gal-title').value.trim(),
+      meta:  document.getElementById('gal-meta').value.trim(),
+    },
+  };
 
-    // Cancel edit state
-    document.getElementById('cancel-btn').addEventListener('click', resetForm);
+  if (idx === -1) photos.push(entry); else photos[idx] = entry;
+  await savePhotos();
+  resetGalForm();
+});
 
-    function resetForm() {
-      document.getElementById('mountain-form').reset();
-      document.getElementById('edit-index').value = '-1';
-      document.getElementById('form-title').textContent = 'Add New Mountain';
-      document.getElementById('cancel-btn').style.display = 'none';
-    }
+async function savePhotos() {
+  try {
+    await apiPost('../api/update-photos', { data: photos });
+    showStatus('Gallery saved successfully!');
+    renderGalList();
+  } catch (e) { showStatus('Save failed: ' + e.message, 'error'); }
+}
 
-    // Save changes (Add / Update)
-    document.getElementById('mountain-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const idx = parseInt(document.getElementById('edit-index').value);
-      const newMountain = {
-        name: document.getElementById('m-name').value,
-        elevation: parseInt(document.getElementById('m-elevation').value),
-        status: document.getElementById('m-status').value,
-        location: document.getElementById('m-location').value,
-        date: document.getElementById('m-date').value,
-        coords: [
-          parseFloat(document.getElementById('m-lat').value),
-          parseFloat(document.getElementById('m-lng').value)
-        ],
-        description: document.getElementById('m-description').value
-      };
-
-      if (idx === -1) {
-        // Add
-        mountainsData.push(newMountain);
-      } else {
-        // Edit
-        mountainsData[idx] = newMountain;
-      }
-
-      await saveToGitHub();
-      resetForm();
-    });
-
-    // Delete mountain
-    window.deleteMountain = async function(idx) {
-      if (!confirm(`Are you sure you want to delete ${mountainsData[idx].name}?`)) return;
-      mountainsData.splice(idx, 1);
-      await saveToGitHub();
-    }
-
-    // Call serverless api to write back to GitHub
-    async function saveToGitHub() {
-      const password = passInput.value;
-      if (!password) {
-        showStatus('Please enter the Admin Password first.', 'error');
-        return;
-      }
-
-      try {
-        const response = await fetch('../api/update-mountains', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            password: password,
-            data: mountainsData
-          })
-        });
-
-        const resData = await response.json();
-        if (!response.ok) {
-          throw new Error(resData.error || 'Server error');
-        }
-
-        showStatus('Changes successfully committed to GitHub!');
-        renderList();
-      } catch (err) {
-        showStatus('Save failed: ' + err.message, 'error');
-      }
-    }
-
-    // Init
-    loadData();
-  </script>
+// ══════════════════════════════════════════════════════════════════════════════
+// Init
+// ══════════════════════════════════════════════════════════════════════════════
+loadMountains();
+loadPhotos();
+</script>
 </body>
 </html>
